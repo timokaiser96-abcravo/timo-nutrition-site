@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -15,29 +14,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save to database
-    const submission = await prisma?.contactSubmission?.create?.({
-      data: {
-        name: name ?? "",
-        email: email ?? "",
-        phone: phone ?? "",
-        subject: subject ?? "",
-        message: message ?? "",
-        formType: "contact",
-        status: "new"
-      }
-    });
+    // TODO: Database connection not configured yet
+    // Temporarily return success without saving to database
+    console.log("Contact form submission (not saved):", { name, email, subject });
 
     return NextResponse.json(
       { 
         success: true, 
-        message: "Nachricht erfolgreich gesendet",
-        id: submission?.id ?? ""
+        message: "Nachricht erfolgreich gesendet (wird derzeit nicht gespeichert)",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error saving contact submission:", error);
+    console.error("Error in contact submission:", error);
     return NextResponse.json(
       { error: "Ein Fehler ist aufgetreten. Bitte versuche es erneut." },
       { status: 500 }
